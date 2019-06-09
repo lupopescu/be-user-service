@@ -8,7 +8,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.UUID;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,8 +28,8 @@ public class UserCommand {
 
     @JsonProperty("password")
     @Min(6)
-    @Max(12)
-    @NonNull
+//    @Max(12)
+    @NotNull
     private String password;
 
 

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserCommand saveUser(UserCommand userCommand) {
+    public UserCommand save(UserCommand userCommand) {
 
         User userInDB=userRepository.findByEmail(userCommand.getEmail());
         if(userInDB==null){
