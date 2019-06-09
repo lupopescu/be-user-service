@@ -5,7 +5,6 @@ import be.user.service.model.UserSession;
 import be.user.service.repository.UserSessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 @Service
@@ -20,17 +19,17 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     @Override
-    public UserSession findByUser(User user) {
+    public UserSession findByUser(String userId) {
 
-        return userSessionRepository.findByUser(user);
+        return userSessionRepository.findByUserId(userId);
     }
 
     @Override
     public UserSession saveUserSession(User user) {
-        UserSession userSession =userSessionRepository.findByUser(user);
+        UserSession userSession =userSessionRepository.findByUserId(user.getId());
 
 
-            if (!userSession.equals(null)) {
+            if (userSession !=null) {
                 userSession.setCreationTime(System.currentTimeMillis());
                 userSession.setLastAccesTime(System.currentTimeMillis());
 

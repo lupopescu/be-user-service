@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 public interface UserSessionRepository extends CrudRepository<UserSession, User> {
 
-    UserSession saveUserSession(UserSession user);
-   UserSession findByUser(User user);
+//    UserSession saveUserSession(UserSession user);
+   UserSession findByUserId(String userId);
 }

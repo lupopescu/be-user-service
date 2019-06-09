@@ -5,6 +5,6 @@ import be.user.service.model.UserSession;
 
 public interface UserSessionService {
 
-    UserSession findByUser(User user);
+    UserSession findByUser(String userId);
     UserSession  saveUserSession (User user);
 }
