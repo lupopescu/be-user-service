@@ -25,19 +25,19 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-   private UserSessionRepository userSessionRepository;
+   private final UserSessionService userSessionService;
 
-    public UserServiceImpl(UserRepository userRepository, UserSessionRepository userSessionRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserSessionService userSessionService) {
         this.userRepository = userRepository;
-        this.userSessionRepository = userSessionRepository;
+        this.userSessionService = userSessionService;
     }
 
-    UserCommandToUser userCommandToUser = new UserCommandToUser();
-    UserToUserCommand userToUserCommand = new UserToUserCommand();
-    UserSessionToUserSessionComand userSessionToUserSessionComand=new UserSessionToUserSessionComand();
+    private final UserCommandToUser userCommandToUser = new UserCommandToUser();
+    private final UserToUserCommand userToUserCommand = new UserToUserCommand();
+    private final UserSessionToUserSessionComand userSessionToUserSessionComand=new UserSessionToUserSessionComand();
 
     @Override
     public User findById(String id) {
@@ -101,22 +101,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserSessionComand login(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
 
-        UserSession userSession = new UserSession();
+        UserSession userSession ;
         User user = userCommandToUser.convert(findOneByEmailAndPassword( userCommand));
 
-        if (!user.equals(null)) {
+     if (!user.equals(null)) {
+         userSession= userSessionService.saveUserSession(user);
+         return userSessionToUserSessionComand.convert(userSession);
+     }
 
-        userSession = userSessionRepository.findByUser(user);
-
-        if (userSession.equals(null)) {
-            userSession.setSessionId(UUID.randomUUID().toString());
-
-        }
-
-            userSession.setCreationTime(System.currentTimeMillis());
-            userSession.setLastAccesTime(System.currentTimeMillis());
-        userSession.setUser(user);}
-            UserSession userSession1=userSessionRepository.saveUserSession(user);
-        return userSessionToUserSessionComand.convert(userSession1);
+        return new UserSessionComand();
     }
 }

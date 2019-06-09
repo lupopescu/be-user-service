@@ -1,7 +1,12 @@
 package be.user.service.model;
 
 import lombok.*;
+
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -9,14 +14,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public  class UserSession {
 
-    private String sessionId;
+    private String sessionId= UUID.randomUUID().toString();
 
     private Long creationTime;
 
     private Long lastAccesTime ;
 
-    private Integer maxInactiveInterval ;
 
+    @DBRef
+    @Field("user")
     private User user;
 
 }
