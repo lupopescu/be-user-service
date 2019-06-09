@@ -1,14 +1,13 @@
 package be.user.service.controllers;
 
 import be.user.service.command.UserCommand;
-<<<<<<< HEAD
+
 import be.user.service.exceptions.InvalidUsernameOrPasswordException;
-=======
+
 import be.user.service.command.UserSessionComand;
 import be.user.service.exceptions.InvalidUsernameOrPasswordException;
 import be.user.service.model.User;
 import be.user.service.model.UserSession;
->>>>>>> work
 import be.user.service.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +40,10 @@ public class UsersControllerImpl implements UsersController{
         return ResponseEntity.ok(userService.save(user));
     }
 
-<<<<<<< HEAD
 
-=======
     @Override
     public ResponseEntity<UserSessionComand> userLoginPost(@Valid UserCommand user)  throws InvalidUsernameOrPasswordException{
         return ResponseEntity.ok(userService.login(user));
     }
->>>>>>> work
+
 }

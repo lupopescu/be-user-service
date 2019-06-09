@@ -1,10 +1,9 @@
 package be.user.service.services;
 
 import be.user.service.command.UserCommand;
-<<<<<<< HEAD
-=======
+
 import be.user.service.command.UserSessionComand;
->>>>>>> work
+
 import be.user.service.converters.UserCommandToUser;
 import be.user.service.converters.UserSessionToUserSessionComand;
 import be.user.service.converters.UserToUserCommand;
@@ -26,14 +25,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-<<<<<<< HEAD
-    UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-=======
     private final UserRepository userRepository;
 
     @Autowired
@@ -43,7 +35,6 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.userSessionService = userSessionService;
     }
->>>>>>> work
 
     private final UserCommandToUser userCommandToUser = new UserCommandToUser();
     private final UserToUserCommand userToUserCommand = new UserToUserCommand();
@@ -108,9 +99,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-<<<<<<< HEAD
-
-=======
     @Override
     public UserSessionComand login(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
 
@@ -124,5 +112,5 @@ public class UserServiceImpl implements UserService {
 
         return new UserSessionComand();
     }
->>>>>>> work
+
 }

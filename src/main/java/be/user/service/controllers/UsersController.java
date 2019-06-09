@@ -1,14 +1,11 @@
 package be.user.service.controllers;
 
 import be.user.service.command.UserCommand;
-<<<<<<< HEAD
+
 import be.user.service.exceptions.InvalidUsernameOrPasswordException;
-=======
+
 import be.user.service.command.UserSessionComand;
-import be.user.service.exceptions.InvalidUsernameOrPasswordException;
-import be.user.service.model.User;
-import be.user.service.model.UserSession;
->>>>>>> work
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +30,10 @@ public interface UsersController {
             method = RequestMethod.POST)
      ResponseEntity<UserCommand> usersPost(@Valid @RequestBody UserCommand user) throws InvalidUsernameOrPasswordException;
 
-<<<<<<< HEAD
-=======
     @RequestMapping(value = "/users/login",
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<UserSessionComand> userLoginPost(@Valid @RequestBody UserCommand session)  throws InvalidUsernameOrPasswordException;
->>>>>>> work
+
 
 }
