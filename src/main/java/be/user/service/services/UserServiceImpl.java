@@ -1,11 +1,13 @@
 package be.user.service.services;
 
 import be.user.service.command.UserCommand;
-import be.user.service.command.UserSession;
+import be.user.service.command.UserSessionComand;
 import be.user.service.converters.UserCommandToUser;
+import be.user.service.converters.UserSessionToUserSessionComand;
 import be.user.service.converters.UserToUserCommand;
 import be.user.service.exceptions.InvalidUsernameOrPasswordException;
 import be.user.service.exceptions.NotFoundException;
+import be.user.service.model.UserSession;
 import be.user.service.repository.UserRepository;
 import be.user.service.model.User;
 import be.user.service.repository.UserSessionRepository;
@@ -22,28 +24,29 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    public UserServiceImpl(UserRepository userRepository) {
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+   private UserSessionRepository userSessionRepository;
+
+    public UserServiceImpl(UserRepository userRepository, UserSessionRepository userSessionRepository) {
         this.userRepository = userRepository;
+        this.userSessionRepository = userSessionRepository;
     }
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    UserSessionRepository userSessionRepository;
-
-    UserCommandToUser userCommandToUser=new UserCommandToUser();
-    UserToUserCommand userToUserCommand= new UserToUserCommand();
+    UserCommandToUser userCommandToUser = new UserCommandToUser();
+    UserToUserCommand userToUserCommand = new UserToUserCommand();
+    UserSessionToUserSessionComand userSessionToUserSessionComand=new UserSessionToUserSessionComand();
 
     @Override
     public User findById(String id) {
 
-        Optional<User> user=userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
 
-        if(!user.isPresent()){
-            throw new NotFoundException("User Not Found. For ID value: " + id );
-        }
-        else{
+        if (!user.isPresent()) {
+            throw new NotFoundException("User Not Found. For ID value: " + id);
+        } else {
             return user.get();
         }
     }
@@ -51,14 +54,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserCommand findOneByEmailAndPassword(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
 
-        User userInDB=userRepository.findByEmail(userCommand.getEmail());
+        User userInDB = userRepository.findByEmail(userCommand.getEmail());
 
-        if(userCommand.getEmail().equals(userInDB.getEmail())){
-            if(userCommand.getPassword().equals(userInDB.getPassword())){
+        if (userCommand.getEmail().equals(userInDB.getEmail())) {
+            if (userCommand.getPassword().equals(userInDB.getPassword())) {
 
                 return userToUserCommand.convert(userInDB);
-            }
-            else {
+            } else {
                 throw new InvalidUsernameOrPasswordException("Invalid user email or password exception");
             }
         } else {
@@ -67,17 +69,15 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
     @Override
     public UserCommand save(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
 
-        User userInDB=userRepository.findByEmail(userCommand.getEmail());
-        if(userInDB==null){
-          User user=(userRepository.save(userCommandToUser.convert(userCommand)));
-          return userToUserCommand.convert(user);
-        }else{
-          throw   new InvalidUsernameOrPasswordException("This email is used by another user");
+        User userInDB = userRepository.findByEmail(userCommand.getEmail());
+        if (userInDB == null) {
+            User user = (userRepository.save(userCommandToUser.convert(userCommand)));
+            return userToUserCommand.convert(user);
+        } else {
+            throw new InvalidUsernameOrPasswordException("This email is used by another user");
         }
 
 
@@ -94,30 +94,29 @@ public class UserServiceImpl implements UserService {
     public List<UserCommand> getAllUsers() {
 
         return userRepository.findAll().stream()
-                .map(a->userToUserCommand.convert(a))
+                .map(a -> userToUserCommand.convert(a))
                 .collect(Collectors.toList());
     }
 
     @Override
+    public UserSessionComand login(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
 
-    public UserSession login(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
-        UserSession userSession=new UserSession();
-        User user =userRepository.findByEmail(userCommand.getEmail());
+        UserSession userSession = new UserSession();
+        User user = userCommandToUser.convert(findOneByEmailAndPassword( userCommand));
 
-        if(!user.equals(null)){
-throw new InvalidUsernameOrPasswordException("no such user into DB");
+        if (!user.equals(null)) {
 
-//            userSession.setCreationTime(java.time.LocalDate.now());
+        userSession = userSessionRepository.findByUser(user);
+
+        if (userSession.equals(null)) {
+            userSession.setSessionId(UUID.randomUUID().toString());
+
         }
-        userSession=userSessionRepository.findByUser(user);
-        userSession.setCreationTime(System.currentTimeMillis());
-        userSession.setLastAccesTime(System.currentTimeMillis());
-        userSession.setUser(user);
-        if(!userSession.equals(null)){
 
-            return userSessionRepository.saveUserSession(user);
-        }
-               userSession.setSessionId(UUID.randomUUID().toString());
-        return userSessionRepository.findByUser(user);
+            userSession.setCreationTime(System.currentTimeMillis());
+            userSession.setLastAccesTime(System.currentTimeMillis());
+        userSession.setUser(user);}
+            UserSession userSession1=userSessionRepository.saveUserSession(user);
+        return userSessionToUserSessionComand.convert(userSession1);
     }
 }

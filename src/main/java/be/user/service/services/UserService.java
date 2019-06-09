@@ -1,12 +1,12 @@
 package be.user.service.services;
 
 import be.user.service.command.UserCommand;
-import be.user.service.command.UserSession;
+import be.user.service.command.UserSessionComand;
 import be.user.service.exceptions.InvalidUsernameOrPasswordException;
 import be.user.service.model.User;
+import be.user.service.model.UserSession;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
 
@@ -16,5 +16,5 @@ public interface UserService {
     UserCommand save(UserCommand userCommand) throws InvalidUsernameOrPasswordException;
     void deleteById(String idToDelete);
     List<UserCommand> getAllUsers();
-    UserSession login(UserCommand user) throws InvalidUsernameOrPasswordException;
+    UserSessionComand login(UserCommand user) throws InvalidUsernameOrPasswordException;
 }

@@ -1,8 +1,7 @@
 package be.user.service.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,5 +18,6 @@ public class User {
     private String phoneNumber;
 
     private String password;
+
 
 }
