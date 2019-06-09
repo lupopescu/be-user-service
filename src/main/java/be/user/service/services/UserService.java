@@ -12,7 +12,7 @@ public interface UserService {
     User findById(String id);
       UserCommand findOneByEmailAndPassword(UserCommand userCommand) throws InvalidUsernameOrPasswordException;
 
-    UserCommand save(UserCommand userCommand);
+    UserCommand save(UserCommand userCommand) throws InvalidUsernameOrPasswordException;
     void deleteById(String idToDelete);
     List<UserCommand> getAllUsers();
 }

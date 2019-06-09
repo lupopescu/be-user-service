@@ -33,6 +33,7 @@ public class UsersControllerImpl implements UsersController{
 
     @Override
     public ResponseEntity<UserCommand> usersPost(@Valid UserCommand user) {
+        
         return ResponseEntity.ok(userService.save(user));
     }
 }

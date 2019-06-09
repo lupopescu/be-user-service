@@ -65,15 +65,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserCommand save(UserCommand userCommand) {
+    public UserCommand save(UserCommand userCommand) throws InvalidUsernameOrPasswordException {
 
         User userInDB=userRepository.findByEmail(userCommand.getEmail());
         if(userInDB==null){
           User user=(userRepository.save(userCommandToUser.convert(userCommand)));
           return userToUserCommand.convert(user);
+        }else{
+          throw   new InvalidUsernameOrPasswordException("This email is used bu another user");
         }
 
-        return null;
+
     }
 
     @Override
